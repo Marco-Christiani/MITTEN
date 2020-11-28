@@ -1,0 +1,12 @@
+
+# exclude all files and folders:
+*
+# include mitten folder only
+!mitten/
+!mitten/*
+# include only:
+!LICENSE
+!Pipfile
+!Pipfile.lock
+!README.md
+!setup.py
