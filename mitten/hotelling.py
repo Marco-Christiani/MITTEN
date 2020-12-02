@@ -62,41 +62,40 @@ def hotelling_t2(df,
     ucl = coef * f
     # ucl
 
-    # turn off plotting if verbose = false
-    if not verbose:
-        plt.ioff()
+    if verbose:
 
-    # generate plot of t2 values    
-    themes.theme_ggplot2()
-    fig, ax = plt.subplots(figsize=(10, 7))
-    # ax = sns.scatterplot(data=sim_df_copy['t2'])
-    if h == 0:
-        ax = sns.lineplot(data=t2_values, ax=ax)
-    # ax.axhline(ucl, color='r')
-    else:
-        # ax.axhline(h, color='r')
-        lc = threshold_plot(ax, range(0, len(t2_values)),
-                            np.array(t2_values), h, 'b', 'r')
-        ax.axhline(h, color='k', ls='--')
-    ax.set_xlabel('Observation')
-    ax.set_ylabel('T2 Value')
-    ax.set_title(plot_title)
-    if save:
-        if save_dir:
-            if save_dir[-1] != '/':
-                save_dir += '/'
-            plt.savefig(save_dir + plot_title + '_FULL.png', dpi=300)
+        # generate plot of t2 values    
+        themes.theme_ggplot2()
+        fig, ax = plt.subplots(figsize=(10, 7))
+        # ax = sns.scatterplot(data=sim_df_copy['t2'])
+        if h == 0:
+            ax = sns.lineplot(data=t2_values, ax=ax)
+        # ax.axhline(ucl, color='r')
         else:
-            raise Exception(
-                'Please provide a path to `save_dir` if `save` is set to `True`'
-            )
-    if len(t2_values) > 10000:
-        ax.set_xlim(9000, len(t2_values))
+            # ax.axhline(h, color='r')
+            lc = threshold_plot(ax, range(0, len(t2_values)),
+                                np.array(t2_values), h, 'b', 'r')
+            ax.axhline(h, color='k', ls='--')
+        ax.set_xlabel('Observation')
+        ax.set_ylabel('T2 Value')
+        ax.set_title(plot_title)
         if save:
             if save_dir:
                 if save_dir[-1] != '/':
                     save_dir += '/'
-            plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
+                plt.savefig(save_dir + plot_title + '_FULL.png', dpi=300)
+            else:
+                raise Exception(
+                    'Please provide a path to `save_dir` if `save` is set to `True`'
+                )
+        if len(t2_values) > 10000:
+            ax.set_xlim(9000, len(t2_values))
+            if save:
+                if save_dir:
+                    if save_dir[-1] != '/':
+                        save_dir += '/'
+                plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
 
-    plt.ion()
+    # return t2 values and upper control lim
+    return (t2_values, h)
 

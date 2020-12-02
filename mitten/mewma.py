@@ -49,44 +49,44 @@ def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=Non
     # calculate upper control limit
     ucl = 0  # idk this yet
 
-    # turn off plotting if verbose = false
-    if not verbose:
-        plt.ioff()
 
-    # plot values with UCL value
-    themes.theme_ggplot2()
-    fig, ax = plt.subplots(figsize=(10, 7))
-    # ax = sns.scatterplot(data=t2)
-    # ax = sns.lineplot(data=t2, ax=ax)
-    if h == 0:
-        ax = sns.lineplot(data=t2, ax=ax)
-    else:
-        lc = threshold_plot(ax, np.array(range(0, len(t2))), np.array(t2), h,
-                            'b', 'r')
-        ax.axhline(h, color='k', ls='--')
-    # ax.axhline(ucl, color='r')
-    ax.set_xlabel('Observation')
-    ax.set_ylabel('MEWMA Statistic')
-    ax.set_title(plot_title)
+    if verbose:
 
-    if save:
-        if save_dir:
-            if save_dir[-1] != '/':
-                save_dir += '/'
-            plt.savefig(save_dir + plot_title + '_FULL.png', dpi=300)
+        # plot values with UCL value
+        themes.theme_ggplot2()
+        fig, ax = plt.subplots(figsize=(10, 7))
+        # ax = sns.scatterplot(data=t2)
+        # ax = sns.lineplot(data=t2, ax=ax)
+        if h == 0:
+            ax = sns.lineplot(data=t2, ax=ax)
         else:
-            raise Exception(
-                'Please provide a path to `save_dir` if `save` is set to `True`'
-            )
-    if t2 > 10000:
-        ax.set_xlim(9000, len(t2))
+            lc = threshold_plot(ax, np.array(range(0, len(t2))), np.array(t2), h,
+                                'b', 'r')
+            ax.axhline(h, color='k', ls='--')
+        # ax.axhline(ucl, color='r')
+        ax.set_xlabel('Observation')
+        ax.set_ylabel('MEWMA Statistic')
+        ax.set_title(plot_title)
+
         if save:
             if save_dir:
                 if save_dir[-1] != '/':
                     save_dir += '/'
-            plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
+                plt.savefig(save_dir + plot_title + '_FULL.png', dpi=300)
+            else:
+                raise Exception(
+                    'Please provide a path to `save_dir` if `save` is set to `True`'
+                )
+        if t2 > 10000:
+            ax.set_xlim(9000, len(t2))
+            if save:
+                if save_dir:
+                    if save_dir[-1] != '/':
+                        save_dir += '/'
+                plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
 
-    plt.ion()
+    # return t2 values and upper control lim
+    return (t2, h)
 
 
 def pc_mewma(df, num_in_control, num_princ_comps):
