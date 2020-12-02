@@ -6,15 +6,15 @@ import pandas as pd
 from .plotting import threshold_plot
 
 
-def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=None):
+def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=None, verbose=True):
     """
     Args:
-        df:
-        lambd:
+        df: multivariate dataset as Pandas DataFrame
+        lambd: smoothing parameter
         h:
-        plot_title:
-        save:
-        save_dir:
+        plot_title: title of generated control chart plot
+        save: boolean indicating whether to save the generated plot
+        save_dir: directory in which to save the plot, if saving
     Returns:
 
     """
@@ -30,9 +30,7 @@ def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=Non
     vtv = v.T @ v
 
     # calculate S matrix
-    S = np.zeros(shape=(ncol, ncol))
-    for i in range(ncol):
-        S[i] = (1 / (2 * (nrow - 1))) * (vtv[i])
+    S = (1 / (2 * (nrow-1))) * (vtv)
 
     mx = df - means
 
@@ -50,6 +48,10 @@ def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=Non
 
     # calculate upper control limit
     ucl = 0  # idk this yet
+
+    # turn off plotting if verbose = false
+    if not verbose:
+        plt.ioff()
 
     # plot values with UCL value
     themes.theme_ggplot2()
@@ -83,6 +85,8 @@ def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=Non
                 if save_dir[-1] != '/':
                     save_dir += '/'
             plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
+
+    plt.ion()
 
 
 def pc_mewma(df, num_in_control, num_princ_comps):
