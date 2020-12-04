@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from .plotting import threshold_plot
-
+from numpy import matmul, sqrt, array
 
 def mcusum(df,
-           num_normal,
+           num_in_control,
            k,
-           h,
+           ucl,
            plot_title='MCUSUM',
            save=False,
            verbose=False,
@@ -16,39 +16,36 @@ def mcusum(df,
             --> reference 17 : (Jackson 1985)
             --> reference 5  : (Crosier 1988)
     Args:
-      df:
-      num_normal:
+      df: multivariate dataset as Pandas DataFrame
+      num_in_control: number of in control observations
       k:
-      h:
-      plot_title:
-      save:
-      verbose:
+      ucl: Upper control limit
+      plot_title: title of plot
+      save: if true, saves plot image
+      save_dir: if `save` is true, directory where plot image should be saved
+      verbose: if true, plots results
     Returns:
-
+        MCUSUM statistic values and upper control limit as tuple
     """
-    a = df.head(num_normal).mean(axis=0)  #mean vector of normal data
+    a = df.head(num_in_control).mean(axis=0)  # mean vector of in control data
     cov_inv = np.linalg.inv(np.cov(df, rowvar=False,
-                                   bias=True))  #covariance matrix inverted
+                                   bias=True))  # covariance matrix inverted
     s_old = [0] * df.shape[1]
-
     y_vals = [0] * df.shape[0]
-
     len_list = []
-
     run_length = 0
     for n in range(0, df.shape[0]):
         # get current line
         x = df.iloc[n]
 
         # calculate Cn
-        tf = np.array(s_old + x - a)
-        c = np.matmul(np.matmul(tf, cov_inv), tf)
-        c = np.sqrt(c)
+        tf = array(s_old + x - a)
+        c = matmul(matmul(tf, cov_inv), tf)
+        c = sqrt(c)
 
         # calculate kv (vector k)
         kv = (k / c) * tf
 
-        # print('c: ', c, 'k: ', k)
         # calculate new s
         if (c <= k):
             s_old = 0
@@ -58,9 +55,9 @@ def mcusum(df,
             s_old = tf * (1 - (k / c))
             run_length += 1
             # calculate y (new c)
-            tf = np.array(s_old + x - a)
-            y = np.matmul(np.matmul(tf, cov_inv), tf)
-            y = np.sqrt(y)
+            tf = array(s_old + x - a)
+            y = matmul(matmul(tf, cov_inv), tf)
+            y = sqrt(y)
             y_vals[n] = y
 
         # classify anomaly from limit
@@ -68,14 +65,14 @@ def mcusum(df,
         # print('SIGNAL: ' ,round(y), ', ind: ' ,n)
         # else:
         # print('normal: ', round(y), ' ind: ' , n)
-    if (len(len_list)):
-        print('average run length: ', sum(len_list) / len(len_list))
-    else:
-        print('average run length: 1, (k is small)')
+    # if (len(len_list)):
+    #     print('average run length: ', sum(len_list) / len(len_list))
+    # else:
+    #     print('average run length: 1, (k is small)')
     fig, ax = plt.subplots(figsize=(10, 7))
-    lc = threshold_plot(ax, range(0, df.shape[0]), np.array(y_vals), h, 'b',
+    lc = threshold_plot(ax, range(0, df.shape[0]), array(y_vals), ucl, 'b',
                         'r')
-    ax.axhline(h, color='k', ls='--')
+    ax.axhline(ucl, color='k', ls='--')
     ax.set_title(plot_title)
     ax.set_xlabel('Observation Number')
     ax.set_ylabel('MCUSUM statistic (Anomaly Score)')
