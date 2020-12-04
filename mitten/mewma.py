@@ -6,17 +6,20 @@ import pandas as pd
 from .plotting import threshold_plot
 
 
-def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=None, verbose=True):
+def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=None, verbose=True):
     """
     Args:
         df: multivariate dataset as Pandas DataFrame
         lambd: smoothing parameter
-        h:
+        ucl: upper control limit
         plot_title: title of generated control chart plot
         save: boolean indicating whether to save the generated plot
         save_dir: directory in which to save the plot, if saving
+        save: if True, save plots
+        save_dir: if set, directory to save plots in
+        verbose: if True, plot data
     Returns:
-
+      MEWMA statistic values and control limit
     """
     nrow, ncol = df.shape
     means = df.mean(axis=0)
@@ -47,22 +50,19 @@ def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=Non
         t2.append((z[i].T @ inv) @ z[i])
 
     # calculate upper control limit
-    ucl = 0  # idk this yet
-
+    # ucl = 0  # Not yet supported
 
     if verbose:
-
         # plot values with UCL value
         themes.theme_ggplot2()
         fig, ax = plt.subplots(figsize=(10, 7))
-        # ax = sns.scatterplot(data=t2)
-        # ax = sns.lineplot(data=t2, ax=ax)
-        if h == 0:
+
+        if ucl == 0:
             ax = sns.lineplot(data=t2, ax=ax)
         else:
-            lc = threshold_plot(ax, np.array(range(0, len(t2))), np.array(t2), h,
+            lc = threshold_plot(ax, np.array(range(0, len(t2))), np.array(t2), ucl,
                                 'b', 'r')
-            ax.axhline(h, color='k', ls='--')
+            ax.axhline(ucl, color='k', ls='--')
         # ax.axhline(ucl, color='r')
         ax.set_xlabel('Observation')
         ax.set_ylabel('MEWMA Statistic')
@@ -86,47 +86,34 @@ def apply_mewma(df, lambd=0.1, h=0, plot_title="MEWMA", save=False, save_dir=Non
                 plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
 
     # return t2 values and upper control lim
-    return (t2, h)
+    return t2, ucl
 
 
-def pc_mewma(df, num_in_control, num_princ_comps):
+def pc_mewma(df, num_in_control, num_princ_comps, ucl=0):
     """
     MEWMA on Principle Components
     Variables contained in `df` must have mean 0
 
     Args:
-        df:
-        num_in_control:
-        num_princ_comps:
+        df: multivariate dataset as Pandas DataFrame
+        num_in_control: number of in control observations
+        num_princ_comps: number of principle components to include
+        ucl: upper control limit
     Returns:
-
+        - MEWMA statistic values using PCA for dimensionality reduction
+        - Control limit
     """
-
-
-    # pca = PCA()
-    # princ_comp = pca.fit_transform(df)
-    # plt.figure(figsize=(10,8))
-    # ax = sns.lineplot(data=np.cumsum(pca.explained_variance_ratio_)[:11])
-    # ax.set_xlabel('$k$')
-    # ax.set_ylabel('Percent Explained')
-    # ax.set_title('Percent of Variation Explained by PCs')
-
     in_control_df = pd.DataFrame(df.iloc[:num_in_control])
-    # pc_mat = PCA(n_components = num_princ_comps).fit_transform(in_control_df) # matrix of PCs
-    [_, S,
-     Vt] = np.linalg.svd(in_control_df)  # ensures eigvecs are in correct order
+    [_, S, Vt] = np.linalg.svd(in_control_df)  # ensures eigvecs are in correct order
     V = np.transpose(Vt)
-    eigvec_mat = V[:, :
-                   num_princ_comps]  # Only using the k leading right singular vectors
-    # principalDf = pd.DataFrame(data = princ_comp, columns = ['pc 1', 'pc 2'])
-    W_matrix = [
-    ]  # since apply_mewma only takes a df, not observations as they happen
+    eigvec_mat = V[:, :num_princ_comps]  # Only using the k leading right singular vectors
+    W_matrix = []  # since apply_mewma only takes a df, not observations as they happen
     for index, row in df.iterrows():
         W = np.transpose(eigvec_mat) @ row
         W_matrix.append(W)
     W_df = pd.DataFrame(W_matrix)
-    apply_mewma(W_df,
-                lambd=0.1,
-                h=0,
-                title=f'Principal Component MEWMA, k={num_princ_comps}',
-                save=False)
+    return apply_mewma(W_df,
+                       lambd=0.1,
+                       ucl=ucl,
+                       plot_title=f'Principal Component MEWMA, k={num_princ_comps}',
+                       verbose=False)
