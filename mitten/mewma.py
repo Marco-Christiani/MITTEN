@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pyplot_themes as themes
 import pandas as pd
 from .plotting import threshold_plot
+from numpy.linalg import inv as inverse
 
 
 def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=None, verbose=True):
@@ -46,7 +47,7 @@ def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=N
     t2 = []  # values
     for i in range(nrow):
         w = (lambd / (2 - lambd)) * (1 - (1 - lambd)**(2 * (i + 1)))
-        inv = np.linalg.inv(w * S)
+        inv = inverse(w * S)
         t2.append((z[i].T @ inv) @ z[i])
 
     # calculate upper control limit
