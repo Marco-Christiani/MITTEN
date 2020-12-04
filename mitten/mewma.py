@@ -78,7 +78,7 @@ def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=N
                 raise Exception(
                     'Please provide a path to `save_dir` if `save` is set to `True`'
                 )
-        if t2 > 10000:
+        if len(t2) > 10000:
             ax.set_xlim(9000, len(t2))
             if save:
                 if save_dir:
