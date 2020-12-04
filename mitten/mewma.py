@@ -90,7 +90,7 @@ def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=N
     return t2, ucl
 
 
-def pc_mewma(df, num_in_control, num_princ_comps, ucl=0):
+def pc_mewma(df, num_in_control, num_princ_comps, ucl=0, verbose=False):
     """
     MEWMA on Principle Components
     Variables contained in `df` must have mean 0
@@ -117,4 +117,4 @@ def pc_mewma(df, num_in_control, num_princ_comps, ucl=0):
                        lambd=0.1,
                        ucl=ucl,
                        plot_title=f'Principal Component MEWMA, k={num_princ_comps}',
-                       verbose=False)
+                       verbose=verbose)
