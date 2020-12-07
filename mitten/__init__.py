@@ -1,4 +1,4 @@
 from .diagnostics import interpret_multivariate_signal
 from .hotelling import hotelling_t2
 from .mewma import apply_mewma, pc_mewma
-from .mcusum import cusum
+from .mcusum import mcusum
