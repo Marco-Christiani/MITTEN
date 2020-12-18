@@ -7,8 +7,8 @@ from .plotting import threshold_plot
 
 def hotelling_t2(df,
                  alpha,
-                 n_out_of_control,
-                 h=0,
+                 n_in_control,
+                 ucl=0,
                  plot_title="Hotelling's T2",
                  save=False,
                  save_dir=None,
@@ -17,15 +17,16 @@ def hotelling_t2(df,
     Args:
         df: multivariate dataset as Pandas DataFrame
         alpha: parameter to help determine Upper Control Limit (Not currently used)
-        n_out_of_control: number of out of control observations in dataset
-        h:
+        n_out_of_control: number of in control observations in dataset
+        ucl: upper control limit
         plot_title: title of generated control chart plot
-        save: boolean indicating whether to save the generated plot
-        save_dir: directory in which to save the plot, if saving
+        save: if True, save plots
+        save_dir: if set, directory to save plots in
+        verbose: if True, plot data
     Returns:
         t^2 statistic values and control limit as tuple
     """
-    # calculate difference matrix
+    # calculate covariance matrix
     S = df.cov()
 
     # finding x-mean vector for each row in dataframe
@@ -39,37 +40,16 @@ def hotelling_t2(df,
         t2 = t2@diff
         t2_values.append(t2)
 
-    # calculate the upper control limits
-    m = df.shape[0] - n_out_of_control  # n in-control observations
-    p = df.shape[1]  # num dimensions
-    n = 1  # sample group size (indiv observations)
-    q = 2 * (m - 1) * (m - 1) / ((3 * m) - 4)  # for calculating beta distr
-
-    # For calulating UCL:
-    # V1
-    # df1 = p
-    # df2 = m - p
-    # coef = p * (m - 1) / (m - p)
-
-    # V2
-    # df1 = p
-    # df2 = (m*n) - m - p + 1
-    # coef =
-
-    # alpha = .05
-    # f = scipy.stats.f.ppf(q=1 - alpha, dfn=df1, dfd=df2)
-    # ucl = coef * f
-
     if verbose:
         # generate plot of t2 values
         themes.theme_ggplot2()
         fig, ax = plt.subplots(figsize=(10, 7))
-        if h == 0:
+        if ucl == 0:
             ax = sns.lineplot(data=t2_values, ax=ax)
         else:
             lc = threshold_plot(ax, range(0, len(t2_values)),
                                 np.array(t2_values), h, 'b', 'r')
-            ax.axhline(h, color='k', ls='--')
+            ax.axhline(ucl, color='k', ls='--')
         ax.set_xlabel('Observation')
         ax.set_ylabel('T2 Value')
         ax.set_title(plot_title)
@@ -91,5 +71,5 @@ def hotelling_t2(df,
                 plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
 
     # return t2 values and upper control lim
-    return t2_values, h
+    return t2_values, ucl
 

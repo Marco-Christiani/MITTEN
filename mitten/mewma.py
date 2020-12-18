@@ -14,13 +14,11 @@ def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=N
         lambd: smoothing parameter
         ucl: upper control limit
         plot_title: title of generated control chart plot
-        save: boolean indicating whether to save the generated plot
-        save_dir: directory in which to save the plot, if saving
         save: if True, save plots
         save_dir: if set, directory to save plots in
         verbose: if True, plot data
     Returns:
-      MEWMA statistic values and control limit
+        MEWMA statistic values and control limit as tuple
     """
     nrow, ncol = df.shape
     means = df.mean(axis=0)
@@ -44,14 +42,11 @@ def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=N
         z[i + 1] = lambd * mx.iloc[i] + (1 - lambd) * z[i]
     z = z[1:, :]
 
-    t2 = []  # values
+    t2 = []  # test statistic values
     for i in range(nrow):
         w = (lambd / (2 - lambd)) * (1 - (1 - lambd)**(2 * (i + 1)))
         inv = inverse(w * S)
         t2.append((z[i].T @ inv) @ z[i])
-
-    # calculate upper control limit
-    # ucl = 0  # Not yet supported
 
     if verbose:
         # plot values with UCL value
@@ -101,8 +96,7 @@ def pc_mewma(df, num_in_control, num_princ_comps, ucl=0, verbose=False):
         num_princ_comps: number of principle components to include
         ucl: upper control limit
     Returns:
-        - MEWMA statistic values using PCA for dimensionality reduction
-        - Control limit
+        MEWMA statistic values using PCA for dimensionality reduction and control limit as tuple
     """
     in_control_df = pd.DataFrame(df.iloc[:num_in_control])
     [_, S, Vt] = np.linalg.svd(in_control_df)  # ensures eigvecs are in correct order
