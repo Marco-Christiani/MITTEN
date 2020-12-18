@@ -42,7 +42,8 @@ def build_t_test_df(df, in_control_start, batch_size):
 def interpret_multivariate_signal(df,
                                   n_in_control,
                                   batch_size=5,
-                                  n_most_likely=5):
+                                  n_most_likely=5,
+                                  verbose=False):
     t_test_df = build_t_test_df(df, n_in_control, batch_size)
 
     ranks_srs = pd.Series(index=df.columns)
@@ -53,7 +54,9 @@ def interpret_multivariate_signal(df,
         ranks_srs[t_stats.index] += row.rank(ascending=False)
     ranks_srs = ranks_srs / len(
         t_test_df)  # Convert t statistics to an average ranking
-    print(
-        'The most likely culprit features and average t-statistic ranking in decreasing order are:'
-    )
-    print(ranks_srs.sort_values()[:n_most_likely])
+    if verbose:
+        print(
+            'The most likely culprit features and average t-statistic ranking in decreasing order are:'
+        )
+        print(ranks_srs.sort_values()[:n_most_likely])
+    return ranks_srs.sort_values()

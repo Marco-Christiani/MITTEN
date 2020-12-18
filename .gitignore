@@ -10,3 +10,15 @@
 !Pipfile.lock
 !README.md
 !setup.py
+!requirements.txt
+
+# include docs for RTD/Sphinx
+!docs/
+!docs/**
+
+!.readthedocs.yml
+
+.DS_Store
+**/.DS_Store
+docs/build/.DS_Store
+docs/.DS_Store

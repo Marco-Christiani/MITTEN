@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mitten",
-    version="0.0.5",
+    version="0.0.8",
     author="Marco Christiani",
     author_email="mchristiani2017@gmail.com",
     description="A package for multivariate statistical process control modeling.",
