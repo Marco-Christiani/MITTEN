@@ -10,6 +10,8 @@ Welcome to MITTEN's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   install
+   overview
 
 
 Indices and tables

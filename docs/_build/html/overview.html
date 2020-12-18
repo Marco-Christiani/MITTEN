@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Overview &mdash; MITTEN 0.0.8 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> MITTEN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MITTEN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>The MultIvariate sTatisTical procEss coNtrol (MITTEN)package is one of two Python packages (along with MASE) developed by a team of three college students studying Computational Modeling and Data Analytics, Computer Science, Mathematics, and Statistics. Any issues can be reported on <a class="reference external" href="https://github.com/Marco-Christiani/MITTEN/">Github</a>.</p>
+<span class="target" id="module-mitten"></span><dl class="py function">
+<dt id="mitten.apply_mewma">
+<code class="sig-prename descclassname">mitten.</code><code class="sig-name descname">apply_mewma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">lambd</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">ucl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">plot_title</span><span class="o">=</span><span class="default_value">'MEWMA'</span></em>, <em class="sig-param"><span class="n">save</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mitten.apply_mewma" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – multivariate dataset as Pandas DataFrame</p></li>
+<li><p><strong>lambd</strong> – smoothing parameter</p></li>
+<li><p><strong>ucl</strong> – upper control limit</p></li>
+<li><p><strong>plot_title</strong> – title of generated control chart plot</p></li>
+<li><p><strong>save</strong> – boolean indicating whether to save the generated plot</p></li>
+<li><p><strong>save_dir</strong> – directory in which to save the plot, if saving</p></li>
+<li><p><strong>save</strong> – if True, save plots</p></li>
+<li><p><strong>save_dir</strong> – if set, directory to save plots in</p></li>
+<li><p><strong>verbose</strong> – if True, plot data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>MEWMA statistic values and control limit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mitten.hotelling_t2">
+<code class="sig-prename descclassname">mitten.</code><code class="sig-name descname">hotelling_t2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">n_out_of_control</span></em>, <em class="sig-param"><span class="n">h</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">plot_title</span><span class="o">=</span><span class="default_value">&quot;Hotelling's T2&quot;</span></em>, <em class="sig-param"><span class="n">save</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mitten.hotelling_t2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – multivariate dataset as Pandas DataFrame</p></li>
+<li><p><strong>alpha</strong> – parameter to help determine Upper Control Limit (Not currently used)</p></li>
+<li><p><strong>n_out_of_control</strong> – number of out of control observations in dataset</p></li>
+<li><p><strong>h</strong> – </p></li>
+<li><p><strong>plot_title</strong> – title of generated control chart plot</p></li>
+<li><p><strong>save</strong> – boolean indicating whether to save the generated plot</p></li>
+<li><p><strong>save_dir</strong> – directory in which to save the plot, if saving</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>t^2 statistic values and control limit as tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mitten.interpret_multivariate_signal">
+<code class="sig-prename descclassname">mitten.</code><code class="sig-name descname">interpret_multivariate_signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">n_in_control</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">n_most_likely</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mitten.interpret_multivariate_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Designed to interpret an out of control signal from a multivariate control chart method. Used
+to identify the source of the signal by examining each individual feature using successive t-tests.
+Since this method relies on t-tests, it is ill-equipped to handle shifts in process variability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – dataframe which stores the data to be tested, with features as columns
+and observations as rows.</p></li>
+<li><p><strong>n_in_control</strong> – the number of observations which are in control (the observations before the signal)</p></li>
+<li><p><strong>batch_size</strong> – successive t-tests will be run on subsets of the potentially out of control
+segment of the dataset contained in <cite>df</cite>. The size of each subset (aka batch) is
+controlled by <cite>batch_size</cite></p></li>
+<li><p><strong>n_most_likely</strong> – if <cite>verbose=True</cite> then this controls how many of the most likely observations will
+be printed.</p></li>
+<li><p><strong>verbose</strong> – if <cite>True</cite>, prints the most likely cuplrit features</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A ranked list of features (as a Pandas series) sorted from highest to lowest average t-statistic ranking.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mitten.mcusum">
+<code class="sig-prename descclassname">mitten.</code><code class="sig-name descname">mcusum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">num_in_control</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">ucl</span></em>, <em class="sig-param"><span class="n">plot_title</span><span class="o">=</span><span class="default_value">'MCUSUM'</span></em>, <em class="sig-param"><span class="n">save</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_dir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mitten.mcusum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of the Multivariate Cumulative Sum (MCUSUM) method.</p>
+<blockquote>
+<div><p>Based on Kent(2007) <a class="reference external" href="https://etd.ohiolink.edu/rws_etd/send_file/send?accession=kent1185558637&amp;disposition=inline">https://etd.ohiolink.edu/rws_etd/send_file/send?accession=kent1185558637&amp;disposition=inline</a></p>
+<ul class="simple">
+<li><p>Reference 17 : (Jackson 1985)</p></li>
+<li><p>Reference 5  : (Crosier 1988)</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – multivariate dataset as Pandas DataFrame</p></li>
+<li><p><strong>num_in_control</strong> – number of in control observations</p></li>
+<li><p><strong>k</strong> – decay parameter</p></li>
+<li><p><strong>ucl</strong> – Upper control limit</p></li>
+<li><p><strong>plot_title</strong> – title of plot</p></li>
+<li><p><strong>save</strong> – if true, saves plot image</p></li>
+<li><p><strong>save_dir</strong> – if <cite>save</cite> is true, directory where plot image should be saved</p></li>
+<li><p><strong>verbose</strong> – if true, plots results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>MCUSUM statistic values and upper control limit as tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mitten.pc_mewma">
+<code class="sig-prename descclassname">mitten.</code><code class="sig-name descname">pc_mewma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">num_in_control</span></em>, <em class="sig-param"><span class="n">num_princ_comps</span></em>, <em class="sig-param"><span class="n">ucl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mitten.pc_mewma" title="Permalink to this definition">¶</a></dt>
+<dd><p>MEWMA on Principle Components
+Variables contained in <cite>df</cite> must have mean 0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – multivariate dataset as Pandas DataFrame</p></li>
+<li><p><strong>num_in_control</strong> – number of in control observations</p></li>
+<li><p><strong>num_princ_comps</strong> – number of principle components to include</p></li>
+<li><p><strong>ucl</strong> – upper control limit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>MEWMA statistic values using PCA for dimensionality reduction</p></li>
+<li><p>Control limit</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Marco Christiani, Hamsa Mani, Devin Sohi
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
