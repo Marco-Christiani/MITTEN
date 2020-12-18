@@ -11,7 +11,7 @@ def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=N
     """
     Args:
         df: multivariate dataset as Pandas DataFrame
-        lambd: smoothing parameter
+        lambd: smoothing parameter between 0 and 1; lower value = higher weightage to older observations; default is 0.1
         ucl: upper control limit
         plot_title: title of generated control chart plot
         save: if True, save plots
