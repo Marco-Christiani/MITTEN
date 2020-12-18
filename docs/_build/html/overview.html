@@ -163,32 +163,31 @@
 <li><p><strong>lambd</strong> – smoothing parameter</p></li>
 <li><p><strong>ucl</strong> – upper control limit</p></li>
 <li><p><strong>plot_title</strong> – title of generated control chart plot</p></li>
-<li><p><strong>save</strong> – boolean indicating whether to save the generated plot</p></li>
-<li><p><strong>save_dir</strong> – directory in which to save the plot, if saving</p></li>
 <li><p><strong>save</strong> – if True, save plots</p></li>
 <li><p><strong>save_dir</strong> – if set, directory to save plots in</p></li>
 <li><p><strong>verbose</strong> – if True, plot data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>MEWMA statistic values and control limit</p>
+<dd class="field-even"><p>MEWMA statistic values and control limit as tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="mitten.hotelling_t2">
-<code class="sig-prename descclassname">mitten.</code><code class="sig-name descname">hotelling_t2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">n_out_of_control</span></em>, <em class="sig-param"><span class="n">h</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">plot_title</span><span class="o">=</span><span class="default_value">&quot;Hotelling's T2&quot;</span></em>, <em class="sig-param"><span class="n">save</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mitten.hotelling_t2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mitten.</code><code class="sig-name descname">hotelling_t2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">n_in_control</span></em>, <em class="sig-param"><span class="n">ucl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">plot_title</span><span class="o">=</span><span class="default_value">&quot;Hotelling's T2&quot;</span></em>, <em class="sig-param"><span class="n">save</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mitten.hotelling_t2" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> – multivariate dataset as Pandas DataFrame</p></li>
 <li><p><strong>alpha</strong> – parameter to help determine Upper Control Limit (Not currently used)</p></li>
-<li><p><strong>n_out_of_control</strong> – number of out of control observations in dataset</p></li>
-<li><p><strong>h</strong> – </p></li>
+<li><p><strong>n_out_of_control</strong> – number of in control observations in dataset</p></li>
+<li><p><strong>ucl</strong> – upper control limit</p></li>
 <li><p><strong>plot_title</strong> – title of generated control chart plot</p></li>
-<li><p><strong>save</strong> – boolean indicating whether to save the generated plot</p></li>
-<li><p><strong>save_dir</strong> – directory in which to save the plot, if saving</p></li>
+<li><p><strong>save</strong> – if True, save plots</p></li>
+<li><p><strong>save_dir</strong> – if set, directory to save plots in</p></li>
+<li><p><strong>verbose</strong> – if True, plot data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -268,11 +267,7 @@ Variables contained in <cite>df</cite> must have mean 0</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>MEWMA statistic values using PCA for dimensionality reduction</p></li>
-<li><p>Control limit</p></li>
-</ul>
-</p>
+<dd class="field-even"><p>MEWMA statistic values using PCA for dimensionality reduction and control limit as tuple</p>
 </dd>
 </dl>
 </dd></dl>
