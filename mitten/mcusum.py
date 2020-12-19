@@ -18,10 +18,10 @@ def mcusum(df,
 		num_in_control: number of in control observations
 		k: the slack parameter which determines model sensetivity (should typically be set to 1/2 of the mean shift that you expect to detect)
 	Returns:
-		MCUSUM statistic values and upper control limit as tuple
+		MCUSUM statistic values as a list
 	"""
 	a = df.head(num_in_control).mean(axis=0)  # mean vector of in control data
-	cov_inv = np.linalg.inv(np.cov(df, rowvar=False,bias=True))  # covariance matrix inverted
+	cov_inv = np.linalg.inv(np.cov(df.head(num_in_control), rowvar=False,bias=True))  # covariance matrix inverted
 	s_old = [0] * df.shape[1]
 	y_vals = [0] * df.shape[0]
 	for n in range(0, df.shape[0]):
@@ -47,5 +47,5 @@ def mcusum(df,
 			y = sqrt(y)
 			y_vals[n] = y
 
-	#returns the mcusum statistics as a list and the upper control limit provided
-	return y_vals, ucl
+	#returns the mcusum statistics as a list
+	return y_vals
