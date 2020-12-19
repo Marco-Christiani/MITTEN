@@ -1,27 +1,19 @@
 import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-import pyplot_themes as themes
 import pandas as pd
-from .plotting import threshold_plot
 from numpy.linalg import inv as inverse
 
 
-def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=None, verbose=True):
+def apply_mewma(df, num_in_control, lambd=0.1):
     """
     Args:
         df: multivariate dataset as Pandas DataFrame
+        num_in_control: number of rows before anomalies begin
         lambd: smoothing parameter between 0 and 1; lower value = higher weightage to older observations; default is 0.1
-        ucl: upper control limit
-        plot_title: title of generated control chart plot
-        save: if True, save plots
-        save_dir: if set, directory to save plots in
-        verbose: if True, plot data
     Returns:
-        MEWMA statistic values and control limit as tuple
+        MEWMA statistic values
     """
     nrow, ncol = df.shape
-    means = df.mean(axis=0)
+    means = df.head(num_in_control).mean(axis=0)
 
     # create diff matrix
     v = np.zeros(shape=(nrow - 1, ncol))
@@ -48,44 +40,11 @@ def apply_mewma(df, lambd=0.1, ucl=0, plot_title="MEWMA", save=False, save_dir=N
         inv = inverse(w * S)
         t2.append((z[i].T @ inv) @ z[i])
 
-    if verbose:
-        # plot values with UCL value
-        themes.theme_ggplot2()
-        fig, ax = plt.subplots(figsize=(10, 7))
-
-        if ucl == 0:
-            ax = sns.lineplot(data=t2, ax=ax)
-        else:
-            lc = threshold_plot(ax, np.array(range(0, len(t2))), np.array(t2), ucl,
-                                'b', 'r')
-            ax.axhline(ucl, color='k', ls='--')
-        # ax.axhline(ucl, color='r')
-        ax.set_xlabel('Observation')
-        ax.set_ylabel('MEWMA Statistic')
-        ax.set_title(plot_title)
-
-        if save:
-            if save_dir:
-                if save_dir[-1] != '/':
-                    save_dir += '/'
-                plt.savefig(save_dir + plot_title + '_FULL.png', dpi=300)
-            else:
-                raise Exception(
-                    'Please provide a path to `save_dir` if `save` is set to `True`'
-                )
-        if len(t2) > 10000:
-            ax.set_xlim(9000, len(t2))
-            if save:
-                if save_dir:
-                    if save_dir[-1] != '/':
-                        save_dir += '/'
-                plt.savefig(save_dir + plot_title + '_SMALL.png', dpi=300)
-
-    # return t2 values and upper control lim
-    return t2, ucl
+    # return t2 values
+    return t2
 
 
-def pc_mewma(df, num_in_control, num_princ_comps, ucl=0, verbose=False):
+def pc_mewma(df, num_in_control, num_princ_comps):
     """
     MEWMA on Principle Components
     Variables contained in `df` must have mean 0
@@ -94,9 +53,8 @@ def pc_mewma(df, num_in_control, num_princ_comps, ucl=0, verbose=False):
         df: multivariate dataset as Pandas DataFrame
         num_in_control: number of in control observations
         num_princ_comps: number of principle components to include
-        ucl: upper control limit
     Returns:
-        MEWMA statistic values using PCA for dimensionality reduction and control limit as tuple
+        MEWMA statistic values using PCA for dimensionality reduction
     """
     in_control_df = pd.DataFrame(df.iloc[:num_in_control])
     [_, S, Vt] = np.linalg.svd(in_control_df)  # ensures eigvecs are in correct order
@@ -108,7 +66,5 @@ def pc_mewma(df, num_in_control, num_princ_comps, ucl=0, verbose=False):
         W_matrix.append(W)
     W_df = pd.DataFrame(W_matrix)
     return apply_mewma(W_df,
-                       lambd=0.1,
-                       ucl=ucl,
-                       plot_title=f'Principal Component MEWMA, k={num_princ_comps}',
-                       verbose=verbose)
+                       num_in_control,
+                       lambd=0.1)
