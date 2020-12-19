@@ -56,13 +56,13 @@ def pc_mewma(df, num_in_control, num_princ_comps):
     Returns:
         MEWMA statistic values using PCA for dimensionality reduction
     """
-    in_control_df = pd.DataFrame(df.iloc[:num_in_control])
-    [_, S, Vt] = np.linalg.svd(in_control_df)  # ensures eigvecs are in correct order
-    V = np.transpose(Vt)
-    eigvec_mat = V[:, :num_princ_comps]  # Only using the k leading right singular vectors
+    df = df-df.mean()
+    pca = PCA(n_components=num_princ_comps)
+    s = pca.fit(df)
+    eigvec_mat = s.components_ # V transpose
     W_matrix = []  # since apply_mewma only takes a df, not observations as they happen
     for index, row in df.iterrows():
-        W = np.transpose(eigvec_mat) @ row
+        W = eigvec_mat @ row
         W_matrix.append(W)
     W_df = pd.DataFrame(W_matrix)
     return apply_mewma(W_df,
