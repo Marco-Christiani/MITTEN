@@ -34,8 +34,8 @@ def hotelling_t2(df, num_in_control, alpha=.01, plotting=True, save="", plot_tit
   	count = len([i for i in in_stats if i > ucl]) 
 
   	while(count < (alpha* len(in_stats))):
-        ucl = ucl - step_size
-        count = len([i for i in in_stats if i > ucl])  
+        	ucl = ucl - step_size
+        	count = len([i for i in in_stats if i > ucl])  
       
     #plotting
 	if plotting:
