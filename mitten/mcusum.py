@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import matmul, sqrt, array
+from .plotting import threshold_plot
 
 def mcusum(df, num_in_control,k,alpha=.01, plotting=True, save="", plot_title="MCUSUM"):
 	"""
