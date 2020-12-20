@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from .plotting import threshold_plot
 
 def hotelling_t2(df, num_in_control, alpha=.01, plotting=True, save="", plot_title="Hotellings"):
     """
@@ -27,7 +28,7 @@ def hotelling_t2(df, num_in_control, alpha=.01, plotting=True, save="", plot_tit
         t2_values.append(t2)
        
     #calculate UCL
-	  in_stats = t2_vals[0:num_in_control]
+	in_stats = t2_vals[0:num_in_control]
   	ucl = max(in_stats)
  
   	count = len([i for i in in_stats if i > ucl]) 
@@ -37,25 +38,25 @@ def hotelling_t2(df, num_in_control, alpha=.01, plotting=True, save="", plot_tit
         count = len([i for i in in_stats if i > ucl])  
       
     #plotting
-	  if plotting:
-        fig, ax = plt.subplots(figsize=(10, 7))
-        lc = threshold_plot(ax, range(0, df.shape[0]), array(y_vals), ucl, 'b', 'r')
-        ax.axhline(ucl, color='k', ls='--')
-        ax.set_title(plot_title)
-        ax.set_xlabel('Observation Number')
-        ax.set_ylabel('Hotelling statistic (Anomaly Score)')
+	if plotting:
+		fig, ax = plt.subplots(figsize=(10, 7))
+		lc = threshold_plot(ax, range(0, df.shape[0]), array(t2_vals), ucl, 'b', 'r')
+		ax.axhline(ucl, color='k', ls='--')
+		ax.set_title(plot_title)
+		ax.set_xlabel('Observation Number')
+		ax.set_ylabel('Hotelling statistic (Anomaly Score)')
 
-        #saving plot
-        if save != "":
-            if save[-1] != '/':
-                save += '/'
-            plt.savefig(save + plot_title + '_FULL.png', dpi=300)
+		#saving plot
+		if save != "":
+		    if save[-1] != '/':
+			save += '/'
+		    plt.savefig(save + plot_title + '_FULL.png', dpi=300)
 
-            #if there are a lot of entries, a smaller graph will also be saved that
-            #shows only the end of the graph for more detail.
-            if len(y_vals) > 10000:
-                ax.set_xlim(9000)
-                plt.savefig(save + plot_title + '_SMALL.png', dpi=300)
+		    #if there are a lot of entries, a smaller graph will also be saved that
+		    #shows only the end of the graph for more detail.
+		    if len(y_vals) > 10000:
+			ax.set_xlim(9000)
+			plt.savefig(save + plot_title + '_SMALL.png', dpi=300)
 
     # return t2 values
     return t2_values, ucl
