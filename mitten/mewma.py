@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from numpy.linalg import inv as inverse
+from .plotting import threshold_plot
 
 
 def apply_mewma(df, num_in_control, lambd=0.1, alpha=.01, plotting=True, save="", plot_title="MEWMA"):
@@ -56,7 +57,7 @@ def apply_mewma(df, num_in_control, lambd=0.1, alpha=.01, plotting=True, save=""
 	#plotting
 	if plotting:
 		fig, ax = plt.subplots(figsize=(10, 7))
-		lc = threshold_plot(ax, range(0, df.shape[0]), array(y_vals), ucl, 'b', 'r')
+		lc = threshold_plot(ax, range(0, df.shape[0]), array(t2), ucl, 'b', 'r')
 		ax.axhline(ucl, color='k', ls='--')
 		ax.set_title(plot_title)
 		ax.set_xlabel('Observation Number')
