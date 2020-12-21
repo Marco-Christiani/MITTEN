@@ -1,10 +1,10 @@
 # MITTEN: MultIvariate sTatisTical procEss coNtrol
 A package for MSPC modeling.
-Current supports:
+Currently supports:
 - MCUSUM
 - MEWMA
 - Principle Component MEWMA
 - Hotelling's T^2
 - Univariate Diagnostic t-tests
 
-## TODO
+Documentation: https://mitten.readthedocs.io/en/latest/
