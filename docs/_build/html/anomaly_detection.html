@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Detecting Anomalies in Multivariate Data &mdash; MITTEN 0.0.8 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> MITTEN
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Detecting Anomalies in Multivariate Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#generate-a-dataset">Generate A Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#control-chart-methods">Control Chart Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hotellings-t2">Hotellings T2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mewma">MEWMA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mcusum">MCUSUM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pc-mewma">PC-MEWMA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#diagnostic-tests">Diagnostic Tests</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MITTEN</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Detecting Anomalies in Multivariate Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/anomaly_detection.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="detecting-anomalies-in-multivariate-data">
+<h1>Detecting Anomalies in Multivariate Data<a class="headerlink" href="#detecting-anomalies-in-multivariate-data" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of MITTEN is to generate multivariate control charts to detect mean and variability shifts in datasets with large numbers of features. Let’s look at an example to see how these control charts work.</p>
+<div class="section" id="generate-a-dataset">
+<h2>Generate A Dataset<a class="headerlink" href="#generate-a-dataset" title="Permalink to this headline">¶</a></h2>
+<p>First we need a dataset to work with. Using <a class="reference external" href="https://mase.readthedocs.io/">MASE</a>, we can generate a multivariate normal Pandas DataFrame with anomalies. Let’s start with a simulated dataset with 1,000 observations and 5 features. The final 30 observations will be anomalies. We will apply a mean shift of 1 standard deviation and 20 observations to feature 1. After feature 1’s mean returns to normal, it will undergo a doubling in standard deviation for 10 more observations. For more details on how this can be done using MASE, visit the <a class="reference external" href="https://mase.readthedocs.io/">documentation</a>.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># 5 independent features all with 0 mean</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">mase</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">covariance_matrix</span><span class="o">=</span><span class="n">cov</span><span class="p">)</span>  <span class="c1"># 1000 observations</span>
+<span class="n">specs_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">specs_df</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">specs_df</span><span class="p">[</span><span class="s1">&#39;sd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">specs_df</span><span class="p">[</span><span class="s1">&#39;n_obs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># the last 30 are out of control</span>
+<span class="n">feature_index</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">add_gaussian_observations</span><span class="p">(</span><span class="n">specs_df</span><span class="p">,</span> <span class="n">feature_index</span><span class="p">,</span> <span class="n">visualize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is what feature 1 looks like after undergoing these changes:</p>
+<img alt="_images/output_8_00.png" src="_images/output_8_00.png" />
+<p>Before we continue, let’s save this data and store the number of in control observations:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="n">num_in_control</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">-</span><span class="mi">30</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="control-chart-methods">
+<h2>Control Chart Methods<a class="headerlink" href="#control-chart-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hotellings-t2">
+<h3>Hotellings T2<a class="headerlink" href="#hotellings-t2" title="Permalink to this headline">¶</a></h3>
+<p>Our first multivariate control chart method is Hotelling’s <span class="math notranslate nohighlight">\(T^2\)</span>. To call this method, we need (at the bare minimum) the following information:</p>
+<ul class="simple">
+<li><p>A Pandas DataFrame containing our data with features as integer indexed columns and observations as rows. (<code class="docutils literal notranslate"><span class="pre">data</span></code> for our example)</p></li>
+<li><p>The number of observations in the DataFrame that are considered to be ‘in control’ (i.e. <code class="docutils literal notranslate"><span class="pre">num_in_control</span></code> for our example)</p></li>
+</ul>
+<p>Now that we have this information, let’s run Hotelling’s <span class="math notranslate nohighlight">\(T^2\)</span> on our data and plot the control chart.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">t2_stats</span><span class="p">,</span> <span class="n">ucl</span> <span class="o">=</span> <span class="n">mitten</span><span class="o">.</span><span class="n">hotelling_t2</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_in_control</span><span class="p">,</span> <span class="n">plotting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/output_12_0.png" src="_images/output_12_0.png" />
+<p>The horizontal dashed lines represents the UCL, and any values above it are marked in red are <cite>out of control signals</cite>.</p>
+<p>This call will also return the list of Hotelling’s <span class="math notranslate nohighlight">\(T^2\)</span> statistic values calculated for the dataset, and a calculated UCL (see Overview for more info).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">t2_stats</span><span class="p">[:</span><span class="mi">5</span><span class="p">],</span> <span class="n">ucl</span> <span class="c1"># let&#39;s take a look at the calculated statistics and the plotted UCL</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">([</span><span class="mf">2.1427070394650616</span><span class="p">,</span>
+  <span class="mf">3.1237802220324866</span><span class="p">,</span>
+  <span class="mf">0.3701671821840997</span><span class="p">,</span>
+  <span class="mf">6.04671502956505</span><span class="p">,</span>
+  <span class="mf">4.619356154048912</span><span class="p">],</span>
+ <span class="mf">21.336412918623974</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mewma">
+<h3>MEWMA<a class="headerlink" href="#mewma" title="Permalink to this headline">¶</a></h3>
+<p>Our next control chart is Multivariate Exponentially Weighted Moving Average (MEWMA). Similar to Hotelling’s <span class="math notranslate nohighlight">\(T^2\)</span>, to call this method we need (at the bare minimum) the following information:</p>
+<ul class="simple">
+<li><p>A Pandas DataFrame containing our data with features as integer indexed columns and observations as rows. (<code class="docutils literal notranslate"><span class="pre">data</span></code> for our example)</p></li>
+<li><p>The number of observations in the DataFrame that are considered to be ‘in control’ (i.e. <code class="docutils literal notranslate"><span class="pre">num_in_control</span></code> for our example)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mewma_stats</span><span class="p">,</span> <span class="n">ucl</span> <span class="o">=</span> <span class="n">mitten</span><span class="o">.</span><span class="n">apply_mewma</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_in_control</span><span class="p">,</span> <span class="n">plotting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/output_17_0.png" src="_images/output_17_0.png" />
+<p>This call will also return the list of MEWMA statistic values calculated for the dataset, and a calculated UCL (see Overview for more info).</p>
+</div>
+<div class="section" id="mcusum">
+<h3>MCUSUM<a class="headerlink" href="#mcusum" title="Permalink to this headline">¶</a></h3>
+<p>Our third control chart is Multivariate Cumulative Sum (MCUSUM). Similar to Hotelling’s <span class="math notranslate nohighlight">\(T^2\)</span> and MCUSUM, to call this method we need (at the bare minimum) the following information:</p>
+<ul class="simple">
+<li><p>A Pandas DataFrame containing our data with features as integer indexed columns and observations as rows. (<code class="docutils literal notranslate"><span class="pre">data</span></code> for our example)</p></li>
+<li><p>The number of observations in the DataFrame that are considered to be ‘in control’ (i.e. <code class="docutils literal notranslate"><span class="pre">num_in_control</span></code> for our example)</p></li>
+<li><p>Slack Parameter (k): This parameter determines the model’s sensitivity and should generally be set to 1/2 of the mean shift you expect to detect. In this example, we are expecting a mean shift of 1 standard deviation for data <span class="math notranslate nohighlight">\(\sim N(0,1)\)</span>, so let’s set k = 0.5.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mcusum_stats</span><span class="p">,</span> <span class="n">ucl</span> <span class="o">=</span> <span class="n">mitten</span><span class="o">.</span><span class="n">mcusum</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_in_control</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">plotting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/output_21_0.png" src="_images/output_21_0.png" />
+</div>
+<div class="section" id="pc-mewma">
+<h3>PC-MEWMA<a class="headerlink" href="#pc-mewma" title="Permalink to this headline">¶</a></h3>
+<p>This multivariate control chart method applies MEWMA to the principal components of the provided dataset. Similar to the previous methods, we will require the following information</p>
+<ul class="simple">
+<li><p>A Pandas DataFrame containing our data with features as integer indexed columns and observations as rows. (<code class="docutils literal notranslate"><span class="pre">data</span></code> for our example)</p></li>
+<li><p>The number of observations in the DataFrame that are considered to be ‘in control’ (i.e. <code class="docutils literal notranslate"><span class="pre">num_in_control</span></code> for our example)</p></li>
+<li><p>The number of principal components to include. For our dataset, lets use 3 principal components.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pc_mewma_stats</span><span class="p">,</span> <span class="n">ucl</span> <span class="o">=</span> <span class="n">mitten</span><span class="o">.</span><span class="n">pc_mewma</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_in_control</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">plotting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/output_25_0.png" src="_images/output_25_0.png" />
+</div>
+</div>
+<div class="section" id="diagnostic-tests">
+<h2>Diagnostic Tests<a class="headerlink" href="#diagnostic-tests" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have run our control chart methods on our data, we need to determine which feature is at fault for the shift.</p>
+<p>To accomplish this, we can use the <code class="docutils literal notranslate"><span class="pre">interpret_multivariate_signal()</span></code> method. We pass the method:</p>
+<ul class="simple">
+<li><p>Our multivariate time series data: <code class="docutils literal notranslate"><span class="pre">data</span></code></p></li>
+<li><p>The statistics calculated by our method of choice: let’s use
+<code class="docutils literal notranslate"><span class="pre">pc_mewma_stats</span></code></p></li>
+<li><p>A UCL: let’s use the one returned from <code class="docutils literal notranslate"><span class="pre">pc_mewma()</span></code></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mitten</span><span class="o">.</span><span class="n">interpret_multivariate_signal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pc_mewma_stats</span><span class="p">,</span> <span class="n">ucl</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+<pre class="literal-block">The most likely culprit features and average t-statistic ranking in decreasing order are:
+1    1.2
+4    3.2
+0    3.4
+2    3.6
+3    3.6
+dtype: float64</pre>
+<p>Great! Recall that our true culprit feature was feature 1, and the diagnostic algorithm correctly ranked this feature as the #1 most likely culprit!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Marco Christiani, Hamsa Mani, Devin Sohi
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

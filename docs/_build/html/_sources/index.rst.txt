@@ -12,6 +12,7 @@ Welcome to MITTEN's documentation!
 
    install
    overview
+   anomaly_detection
 
 
 Indices and tables
