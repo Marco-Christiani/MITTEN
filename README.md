@@ -8,4 +8,5 @@ Currently supports:
 - Univariate Diagnostic t-tests
 
 Documentation: https://mitten.readthedocs.io/en/latest/
+
 ARL/Diagnostic Studies: https://github.com/Marco-Christiani/MSPC-Analysis
