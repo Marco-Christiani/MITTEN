@@ -17,7 +17,7 @@ def calculate_ucl(in_control_stats, false_positive_rate, step_size=0.01):
 	count = 0
 
 	while(count < (false_positive_rate*len(in_control_stats))):
-		ucl = ucl - step_size # lower UCL by `step_size`
+		ucl = ucl - step_size # lower UCL by step_size
 		# count number of statistics above current ucl
 		count = len([i for i in in_control_stats if i > ucl])
 	return ucl

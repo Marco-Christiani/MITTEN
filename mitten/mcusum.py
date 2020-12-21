@@ -1,8 +1,11 @@
 import numpy as np
-from numpy import matmul, sqrt, array
+import matplotlib.pyplot as plt
+from numpy import matmul, sqrt, array # repeated operations
 from .plotting import threshold_plot
+from .helpers import calculate_ucl
 
-def mcusum(df, num_in_control,k,alpha=.01, plotting=True, save="", plot_title="MCUSUM"):
+
+def mcusum(df, num_in_control, k, alpha=0, plotting=True, save='', plot_title='MCUSUM'):
 	"""
 	Implementation of the Multivariate Cumulative Sum (MCUSUM) method.
 
@@ -16,11 +19,11 @@ def mcusum(df, num_in_control,k,alpha=.01, plotting=True, save="", plot_title="M
 		df: multivariate dataset as Pandas DataFrame
 		num_in_control: number of in control observations
 		k: the slack parameter which determines model sensetivity (should typically be set to 1/2 of the mean shift that you expect to detect)
-		alpha: the percentage of false positives we want to allow, used for calculating the Upper Control Limit (default .01 or 1%)
+		alpha: the percentage of false positives we want to allow, used for calculating the Upper Control Limit
 		save: the directory to save the graphs to, if not changed from default, nothing will be saved
 		plot_title: the title for the plot generated
 	Returns:
-		MCUSUM statistic values as a list
+		MCUSUM statistic values and a calculated UCL with approximately ``alpha`` false positive rate
 	"""
 	a = df.head(num_in_control).mean(axis=0)  # mean vector of in control data
 	cov_inv = np.linalg.inv(np.cov(df.head(num_in_control), rowvar=False,bias=True))  # covariance matrix inverted
@@ -50,19 +53,15 @@ def mcusum(df, num_in_control,k,alpha=.01, plotting=True, save="", plot_title="M
 			y_vals[n] = y
 	
 	#calculate UCL
-	in_stats = y_vals[0:num_in_control]
-  	ucl = max(in_stats)
+	in_stats = y_vals[:num_in_control]
  
-  	count = len([i for i in in_stats if i > ucl]) 
-
-  	while(count < (alpha* len(in_stats))):
-      		ucl = ucl - step_size
-     		count = len([i for i in in_stats if i > ucl])
+	ucl = calculate_ucl(in_stats, alpha)
 	
 	#plotting
 	if plotting:
+		plt.style.use('ggplot')
 		fig, ax = plt.subplots(figsize=(10, 7))
-		lc = threshold_plot(ax, range(0, df.shape[0]), array(y_vals), ucl, 'b', 'r')
+		lc = threshold_plot(ax, range(0, df.shape[0]), np.array(y_vals), ucl, 'b', 'r')
 		ax.axhline(ucl, color='k', ls='--')
 		ax.set_title(plot_title)
 		ax.set_xlabel('Observation Number')
