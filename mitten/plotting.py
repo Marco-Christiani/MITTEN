@@ -25,8 +25,6 @@ def threshold_plot(ax, x, y, threshv, color, overcolor):
 			The color to use for values over threshv
 	"""
 	
-	
-
 	# Create a colormap for red, green and blue and a norm to color
 	# f' < -0.5 red, f' > 0.5 blue, and the rest green
 	cmap = ListedColormap([color, overcolor])
