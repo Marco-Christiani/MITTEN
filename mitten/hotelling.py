@@ -29,17 +29,17 @@ def hotelling_t2(df, num_in_control, alpha=0, plotting=True, save='', plot_title
 		t2 = diff.transpose() @ s_inv
 		t2 = t2@diff
 		t2_values.append(t2)
-	   
+
 	#calculate UCL
-	in_stats = t2_values[0:num_in_control]
- 
+	in_stats = t2_values[:num_in_control]
+
 	ucl = calculate_ucl(in_stats, alpha)
-	  
+
 	#plotting
 	if plotting:
 		plt.style.use('ggplot')
 		fig, ax = plt.subplots(figsize=(10, 7))
-		lc = threshold_plot(ax, range(0, df.shape[0]), np.array(t2_values), ucl, 'b', 'r')
+		lc = threshold_plot(ax, range(df.shape[0]), np.array(t2_values), ucl, 'b', 'r')
 		ax.axhline(ucl, color='k', ls='--')
 		ax.set_title(plot_title)
 		ax.set_xlabel('Observation Number')

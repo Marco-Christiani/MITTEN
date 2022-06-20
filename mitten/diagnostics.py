@@ -24,8 +24,7 @@ def _univariate_t_test(data, n_in_control, alpha=0.05):
 
 	mean_new = new_data.mean()
 
-	t = (mean_new - mean_ref) / np.sqrt(sd_ref * (1 / n_new + 1 / n_ref))
-	return t
+	return (mean_new - mean_ref) / np.sqrt(sd_ref * (1 / n_new + 1 / n_ref))
 
 
 def _build_t_test_df(df, in_control_start, batch_size):
@@ -45,8 +44,6 @@ def _build_t_test_df(df, in_control_start, batch_size):
 		Each cell stores a test statistic.
 	"""
 	t_df = pd.DataFrame(columns=df.columns)
-	# t_matrix = []
-	m = 0
 	for in_control in range(in_control_start, len(df), batch_size):
 		row = {}
 		for col in df.columns:
@@ -54,7 +51,6 @@ def _build_t_test_df(df, in_control_start, batch_size):
 			t = _univariate_t_test(df[col][:end_index], in_control, alpha=0.05)
 			row[col] = t
 		t_df = t_df.append(row, ignore_index=True)
-		m += 1
 	t_df.index = list(range(in_control_start, len(df), batch_size))
 	return t_df
 

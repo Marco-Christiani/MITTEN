@@ -46,16 +46,17 @@ def apply_mewma(df, num_in_control, lambd=0.1, alpha=0, plotting=True, save='', 
 		w = (lambd / (2 - lambd)) * (1 - (1 - lambd)**(2 * (i + 1)))
 		inv = inverse(w * S)
 		mewma_stats.append((z[i].T @ inv) @ z[i])
-		
+
 	#calculate UCL
 	in_stats = mewma_stats[:num_in_control]
 	ucl = calculate_ucl(in_stats, alpha)
-	
+
 	#plotting
 	if plotting:
 		plt.style.use('ggplot')
 		fig, ax = plt.subplots(figsize=(10, 7))
-		lc = threshold_plot(ax, range(0, df.shape[0]), np.array(mewma_stats), ucl, 'b', 'r')
+		lc = threshold_plot(ax, range(df.shape[0]), np.array(mewma_stats), ucl, 'b',
+		                    'r')
 		ax.axhline(ucl, color='k', ls='--')
 		ax.set_title(plot_title)
 		ax.set_xlabel('Observation Number')
@@ -66,7 +67,7 @@ def apply_mewma(df, num_in_control, lambd=0.1, alpha=0, plotting=True, save='', 
 			if save[-1] != '/':
 				save += '/'
 			plt.savefig(save + plot_title + '_FULL.png', dpi=300)
-			
+
 			#if there are a lot of entries, a smaller graph will also be saved that
 			#shows only the end of the graph for more detail.
 			if len(y_vals) > 10000:
